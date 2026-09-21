@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Lucro</title>
+  <title>Calculadora de Lucro - Marketplaces</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
@@ -13,6 +13,17 @@
     label { display: block; font-size: 0.875rem; color: #94a3b8; margin-bottom: 6px; }
     input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
     input:focus { border-color: #38bdf8; }
+    
+    .presets-label { font-size: 0.875rem; color: #94a3b8; margin-bottom: 8px; display: block; }
+    .presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .btn-preset {
+      background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 10px; border-radius: 8px;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; display: flex; flex-direction: column; gap: 2px;
+    }
+    .btn-preset:hover { background: #475569; border-color: #38bdf8; }
+    .btn-preset.active { background: #0284c7; border-color: #38bdf8; color: #fff; }
+    .preset-sub { font-size: 0.7rem; font-weight: normal; opacity: 0.8; }
+
     .results { margin-top: 24px; padding-top: 20px; border-top: 1px solid #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .res-box { background: #0f172a; padding: 14px; border-radius: 8px; text-align: center; }
     .res-label { font-size: 0.75rem; color: #94a3b8; margin-bottom: 4px; }
@@ -24,21 +35,45 @@
 <body>
   <div class="card">
     <h1>📊 Calculadora de Lucro</h1>
+
     <div class="group">
       <label>Custo do Produto (R$)</label>
       <input type="number" id="custo" placeholder="0.00" step="0.01" oninput="calcular()">
     </div>
+
     <div class="group">
       <label>Preço de Venda (R$)</label>
       <input type="number" id="venda" placeholder="0.00" step="0.01" oninput="calcular()">
     </div>
+
+    <span class="presets-label">⚡ Seleção Rápida de Marketplace:</span>
+    <div class="presets-grid">
+      <button type="button" class="btn-preset" onclick="aplicarTaxas(14, 6.50, this)">
+        <span>💛 ML Clássico</span>
+        <span class="preset-sub">14% + R$ 6,50</span>
+      </button>
+      <button type="button" class="btn-preset" onclick="aplicarTaxas(19, 6.50, this)">
+        <span>💛 ML Premium</span>
+        <span class="preset-sub">19% + R$ 6,50</span>
+      </button>
+      <button type="button" class="btn-preset" onclick="aplicarTaxas(14, 4.00, this)">
+        <span>🧡 Shopee Padrão</span>
+        <span class="preset-sub">14% + R$ 4,00</span>
+      </button>
+      <button type="button" class="btn-preset" onclick="aplicarTaxas(20, 4.00, this)">
+        <span>🧡 Shopee Frete Grátis</span>
+        <span class="preset-sub">20% + R$ 4,00</span>
+      </button>
+    </div>
+
     <div class="group">
       <label>Taxas e Comissões (%)</label>
-      <input type="number" id="taxas" placeholder="0" step="0.1" oninput="calcular()">
+      <input type="number" id="taxas" placeholder="0" step="0.1" oninput="limparAtivos(); calcular();">
     </div>
+
     <div class="group">
-      <label>Outros Custos / Frete (R$)</label>
-      <input type="number" id="outros" placeholder="0.00" step="0.01" oninput="calcular()">
+      <label>Taxa Fixa / Outros Custos (R$)</label>
+      <input type="number" id="outros" placeholder="0.00" step="0.01" oninput="limparAtivos(); calcular();">
     </div>
 
     <div class="results">
@@ -54,6 +89,23 @@
   </div>
 
   <script>
+    function aplicarTaxas(pct, taxaFixa, elemento) {
+      document.getElementById('taxas').value = pct;
+      document.getElementById('outros').value = taxaFixa;
+
+      limparAtivos();
+      if (elemento) {
+        elemento.classList.add('active');
+      }
+
+      calcular();
+    }
+
+    function limparAtivos() {
+      const botoes = document.querySelectorAll('.btn-preset');
+      botoes.forEach(btn => btn.classList.remove('active'));
+    }
+
     function calcular() {
       const custo = parseFloat(document.getElementById('custo').value) || 0;
       const venda = parseFloat(document.getElementById('venda').value) || 0;
@@ -79,4 +131,3 @@
   </script>
 </body>
 </html>
-
