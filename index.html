@@ -1,258 +1,410 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plataforma de Cálculo & Precificação</title>
+  <title>Calculadora de Precificação & Ficha de Produto</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .card { background: #1e293b; width: 100%; max-width: 520px; padding: 24px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; }
-    
-    /* Branding Header */
-    .brand-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #334155; }
-    .brand-logo-container { display: flex; align-items: center; gap: 12px; }
-    .brand-logo { width: 44px; height: 44px; border-radius: 10px; background: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #0f172a; font-weight: bold; overflow: hidden; object-fit: cover; }
-    .brand-title { font-size: 1.2rem; font-weight: 700; color: #f8fafc; }
-    .brand-subtitle { font-size: 0.75rem; color: #94a3b8; }
-    .logo-upload-btn { font-size: 0.7rem; background: #334155; color: #38bdf8; padding: 6px 10px; border-radius: 6px; cursor: pointer; border: 1px solid #475569; }
-    .logo-upload-btn:hover { background: #475569; }
-    #logo-file { display: none; }
-
-    /* Modos / Tabs */
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0f172a; padding: 4px; border-radius: 10px; }
-    .tab-btn { flex: 1; padding: 10px; font-size: 0.85rem; font-weight: 600; background: transparent; color: #94a3b8; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-    .tab-btn.active { background: #0284c7; color: #fff; }
-
-    .group { margin-bottom: 14px; }
-    label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px; }
-    input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
-    input:focus { border-color: #38bdf8; }
-    
-    .presets-label { font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; display: block; }
-    .presets-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 16px; }
-    .btn-preset {
-      background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 8px 4px; border-radius: 8px;
-      font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; display: flex; flex-direction: column; gap: 2px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .btn-preset:hover { background: #475569; border-color: #38bdf8; }
-    .btn-preset.active { background: #0284c7; border-color: #38bdf8; color: #fff; }
-    .preset-sub { font-size: 0.65rem; font-weight: normal; opacity: 0.8; }
 
-    /* Resultados */
-    .results { margin-top: 20px; padding-top: 16px; border-top: 1px solid #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .res-box { background: #0f172a; padding: 14px; border-radius: 10px; text-align: center; border: 1px solid #1e293b; }
-    .res-box.full { grid-column: span 2; background: #0369a1; border-color: #38bdf8; }
-    .res-label { font-size: 0.75rem; color: #94a3b8; margin-bottom: 4px; }
-    .res-box.full .res-label { color: #e0f2fe; }
-    .res-val { font-size: 1.25rem; font-weight: bold; }
-    .lucro-pos { color: #4ade80; }
-    .lucro-neg { color: #f87171; }
+    body {
+      background-color: #f4f6f9;
+      color: #333;
+      padding: 20px;
+    }
 
-    /* Botão Exportar */
-    .export-btn { width: 100%; margin-top: 16px; padding: 12px; background: #10b981; color: #0f172a; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .export-btn:hover { background: #34d399; }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
 
-    /* Layout de Impressão / PDF */
+    /* Header e Logo */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #eef2f5;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
+    }
+
+    .header-info h1 {
+      font-size: 24px;
+      color: #1e293b;
+    }
+
+    .header-info p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .logo-container {
+      text-align: center;
+    }
+
+    .logo-preview {
+      max-height: 70px;
+      max-width: 180px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    /* Formulário e Inputs */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1fr solid #e2e8f0;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #0f172a;
+      border-left: 4px solid #2563eb;
+      padding-left: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #2563eb;
+    }
+
+    /* Preview do Produto */
+    .product-preview-card {
+      display: flex;
+      gap: 20px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      align-items: center;
+    }
+
+    .product-img-box {
+      width: 130px;
+      height: 130px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px dashed #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .product-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-details {
+      flex-grow: 1;
+    }
+
+    .product-details h4 {
+      font-size: 18px;
+      color: #166534;
+      margin-bottom: 8px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .stat-box span {
+      display: block;
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .stat-box strong {
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .stat-box.highlight strong {
+      color: #16a34a;
+    }
+
+    /* Botões */
+    .actions {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background: #15803d;
+    }
+
+    /* Regras de Impressão (PDF) */
     @media print {
-      body { background: #fff; color: #000; padding: 0; }
-      .card { box-shadow: none; border: none; width: 100%; max-width: 100%; background: #fff; color: #000; }
-      .tabs, .presets-grid, .presets-label, .export-btn, .logo-upload-btn, #logo-file { display: none !important; }
-      input { background: #f1f5f9; color: #000; border: 1px solid #cbd5e1; }
-      .brand-title { color: #000; }
-      .res-box { background: #f8fafc; border: 1px solid #cbd5e1; color: #000; }
-      .res-box.full { background: #e0f2fe; border-color: #0284c7; }
-      .res-box.full .res-label { color: #0369a1; }
-      .res-val { color: #000 !important; }
-      label { color: #475569; }
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        padding: 10px;
+      }
+      .actions, .no-print {
+        display: none !important;
+      }
+      .card {
+        border: 1px solid #ccc;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card" id="card-content">
-    
-    <!-- Branding Header com Logo Personalizado -->
-    <div class="brand-header">
-      <div class="brand-logo-container">
-        <img id="logo-img" class="brand-logo" src="" alt="Logo" style="display:none;">
-        <div id="logo-placeholder" class="brand-logo">⚡</div>
-        <div>
-          <div class="brand-title">Gestão de Vendas</div>
-          <div class="brand-subtitle">Calculadora de Lucro & Precificação</div>
+
+  <div class="container">
+    <!-- Cabeçalho com Logo -->
+    <div class="header">
+      <div class="header-info">
+        <h1>Análise de Precificação & Produto</h1>
+        <p>Relatório de Viabilidade e Margem de Lucro</p>
+      </div>
+      <div class="logo-container">
+        <img id="logoImg" class="logo-preview" src="https://via.placeholder.com/150x60?text=Sua+Logo" alt="Logo">
+        <input type="file" id="logoInput" accept="image/*" class="no-print" style="font-size: 11px;">
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="grid">
+      <!-- Dados do Produto -->
+      <div class="card">
+        <h3>1. Dados do Produto</h3>
+        
+        <div class="form-group">
+          <label for="productName">Nome do Produto</label>
+          <input type="text" id="productName" placeholder="Ex: Camisa Polo Masculina" value="Camisa Polo Masculina" oninput="calcular()">
+        </div>
+
+        <div class="form-group no-print">
+          <label for="productImageInput">Foto do Produto</label>
+          <input type="file" id="productImageInput" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label for="costPrice">Custo do Produto (R$)</label>
+          <input type="number" id="costPrice" value="25.00" step="0.01" oninput="calcular()">
+        </div>
+
+        <div class="form-group">
+          <label for="shippingCost">Embalagem & Frete Fixo (R$)</label>
+          <input type="number" id="shippingCost" value="4.00" step="0.01" oninput="calcular()">
         </div>
       </div>
-      <label for="logo-file" class="logo-upload-btn">📷 Logótipo</label>
-      <input type="file" id="logo-file" accept="image/*" onchange="carregarLogo(event)">
-    </div>
 
-    <!-- Seletor de Modo (Abas) -->
-    <div class="tabs">
-      <button type="button" class="tab-btn active" id="tab-lucro" onclick="mudarModo('lucro')">📊 Calcular Lucro</button>
-      <button type="button" class="tab-btn" id="tab-preco" onclick="mudarModo('preco')">🎯 Preço Ideal</button>
-    </div>
+      <!-- Venda e Taxas da Plataforma -->
+      <div class="card">
+        <h3>2. Plataforma & Venda</h3>
+        
+        <div class="form-group">
+          <label for="salePrice">Preço de Venda Pretendido (R$)</label>
+          <input type="number" id="salePrice" value="69.90" step="0.01" oninput="calcular()">
+        </div>
 
-    <div class="group">
-      <label>Custo do Produto (R$)</label>
-      <input type="number" id="custo" placeholder="0.00" step="0.01" oninput="calcular()">
-    </div>
+        <div class="form-group">
+          <label for="platformFee">Taxa da Plataforma (%) [Ex: Shopee / Mercado Livre]</label>
+          <input type="number" id="platformFee" value="14" step="0.1" oninput="calcular()">
+        </div>
 
-    <!-- Campo do Preço de Venda (Modo 1) -->
-    <div class="group" id="group-venda">
-      <label>Preço de Venda (R$)</label>
-      <input type="number" id="venda" placeholder="0.00" step="0.01" oninput="calcular()">
-    </div>
-
-    <!-- Campo da Margem Desejada (Modo 2) -->
-    <div class="group" id="group-margem-desejada" style="display:none;">
-      <label>Margem de Lucro Desejada (%)</label>
-      <input type="number" id="margem-desejada" placeholder="Ex: 20" step="0.1" oninput="calcular()">
-    </div>
-
-    <span class="presets-label">⚡ Seleção Rápida de Marketplace:</span>
-    <div class="presets-grid">
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(14, 6.50, this)">
-        <span>💛 ML Clássico</span>
-        <span class="preset-sub">14% + R$ 6,50</span>
-      </button>
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(19, 6.50, this)">
-        <span>💛 ML Premium</span>
-        <span class="preset-sub">19% + R$ 6,50</span>
-      </button>
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(14, 4.00, this)">
-        <span>🧡 Shopee Padrão</span>
-        <span class="preset-sub">14% + R$ 4,00</span>
-      </button>
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(20, 4.00, this)">
-        <span>🧡 Shopee Frete</span>
-        <span class="preset-sub">20% + R$ 4,00</span>
-      </button>
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(15, 2.00, this)">
-        <span>📦 Amazon</span>
-        <span class="preset-sub">15% + R$ 2,00</span>
-      </button>
-      <button type="button" class="btn-preset" onclick="aplicarTaxas(16, 3.00, this)">
-        <span>💙 Magalu</span>
-        <span class="preset-sub">16% + R$ 3,00</span>
-      </button>
-    </div>
-
-    <div class="group">
-      <label>Taxas e Comissões (%)</label>
-      <input type="number" id="taxas" placeholder="0" step="0.1" oninput="limparAtivos(); calcular();">
-    </div>
-
-    <div class="group">
-      <label>Taxa Fixa / Outros Custos (R$)</label>
-      <input type="number" id="outros" placeholder="0.00" step="0.01" oninput="limparAtivos(); calcular();">
-    </div>
-
-    <!-- Área de Resultados Dinâmicos -->
-    <div class="results">
-      <div class="res-box full" id="box-preco-sugerido" style="display:none;">
-        <div class="res-label">Preço de Venda Sugerido</div>
-        <div class="res-val" id="preco-sugerido" style="color: #fff;">R$ 0,00</div>
-      </div>
-      <div class="res-box" id="box-lucro">
-        <div class="res-label">Lucro Líquido</div>
-        <div class="res-val lucro-pos" id="lucro">R$ 0,00</div>
-      </div>
-      <div class="res-box" id="box-margem">
-        <div class="res-label">Margem Real</div>
-        <div class="res-val" id="margem">0%</div>
+        <div class="form-group">
+          <label for="taxFee">Impostos / Outros (%)</label>
+          <input type="number" id="taxFee" value="6" step="0.1" oninput="calcular()">
+        </div>
       </div>
     </div>
 
-    <!-- Botão de Exportação para PDF -->
-    <button type="button" class="export-btn" onclick="exportarPDF()">
-      <span>📄 Exportar / Salvar PDF</span>
-    </button>
+    <!-- Card de Apresentação com a Imagem do Produto -->
+    <div class="product-preview-card">
+      <div class="product-img-box">
+        <img id="productImg" src="https://via.placeholder.com/130?text=Foto+do+Produto" alt="Produto">
+      </div>
+      <div class="product-details">
+        <h4 id="displayProductName">Camisa Polo Masculina</h4>
+        
+        <div class="results-grid">
+          <div class="stat-box">
+            <span>Preço Venda</span>
+            <strong id="resSalePrice">R$ 69,90</strong>
+          </div>
+
+          <div class="stat-box">
+            <span>Custo Total</span>
+            <strong id="resTotalCost">R$ 29,00</strong>
+          </div>
+
+          <div class="stat-box">
+            <span>Taxas Totais</span>
+            <strong id="resFees">R$ 13,98</strong>
+          </div>
+
+          <div class="stat-box highlight">
+            <span>Lucro Líquido</span>
+            <strong id="resProfit">R$ 26,92</strong>
+          </div>
+
+          <div class="stat-box highlight">
+            <span>Margem %</span>
+            <strong id="resMargin">38.5%</strong>
+          </div>
+
+          <div class="stat-box">
+            <span>Retorno (ROI)</span>
+            <strong id="resROI">92.8%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="actions no-print">
+      <button class="btn btn-primary" onclick="calcular()">Recalcular</button>
+      <button class="btn btn-success" onclick="window.print()">Exportar PDF / Imprimir</button>
+    </div>
   </div>
 
   <script>
-    let modoAtual = 'lucro';
-
-    function carregarLogo(event) {
-      const file = event.target.files[0];
+    // Carregar Logo
+    document.getElementById('logoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.getElementById('logo-img');
-          const placeholder = document.getElementById('logo-placeholder');
-          img.src = e.target.result;
-          img.style.display = 'block';
-          placeholder.style.display = 'none';
+        reader.onload = function(evt) {
+          document.getElementById('logoImg').src = evt.target.result;
         }
         reader.readAsDataURL(file);
       }
-    }
+    });
 
-    function mudarModo(modo) {
-      modoAtual = modo;
-      document.getElementById('tab-lucro').classList.toggle('active', modo === 'lucro');
-      document.getElementById('tab-preco').classList.toggle('active', modo === 'preco');
-
-      document.getElementById('group-venda').style.display = (modo === 'lucro') ? 'block' : 'none';
-      document.getElementById('group-margem-desejada').style.display = (modo === 'preco') ? 'block' : 'none';
-      document.getElementById('box-preco-sugerido').style.display = (modo === 'preco') ? 'block' : 'none';
-
-      calcular();
-    }
-
-    function aplicarTaxas(pct, taxaFixa, elemento) {
-      document.getElementById('taxas').value = pct;
-      document.getElementById('outros').value = taxaFixa;
-      limparAtivos();
-      if (elemento) elemento.classList.add('active');
-      calcular();
-    }
-
-    function limparAtivos() {
-      document.querySelectorAll('.btn-preset').forEach(btn => btn.classList.remove('active'));
-    }
-
-    function calcular() {
-      const custo = parseFloat(document.getElementById('custo').value) || 0;
-      const taxasPct = parseFloat(document.getElementById('taxas').value) || 0;
-      const outros = parseFloat(document.getElementById('outros').value) || 0;
-
-      const elLucro = document.getElementById('lucro');
-      const elMargem = document.getElementById('margem');
-      const elPrecoSugerido = document.getElementById('preco-sugerido');
-
-      if (modoAtual === 'lucro') {
-        const venda = parseFloat(document.getElementById('venda').value) || 0;
-        const valorTaxas = (venda * taxasPct) / 100;
-        const lucroLiquido = venda - custo - valorTaxas - outros;
-        const margemPct = venda > 0 ? (lucroLiquido / venda) * 100 : 0;
-
-        elLucro.innerText = 'R$ ' + lucroLiquido.toFixed(2).replace('.', ',');
-        elMargem.innerText = margemPct.toFixed(1) + '%';
-        elLucro.className = 'res-val ' + (lucroLiquido >= 0 ? 'lucro-pos' : 'lucro-neg');
-      } else {
-        const margemDesejadaPct = parseFloat(document.getElementById('margem-desejada').value) || 0;
-        const divisor = 1 - ((taxasPct + margemDesejadaPct) / 100);
-
-        if (divisor > 0) {
-          const precoIdeal = (custo + outros) / divisor;
-          const valorTaxas = (precoIdeal * taxasPct) / 100;
-          const lucroLiquido = precoIdeal * (margemDesejadaPct / 100);
-
-          elPrecoSugerido.innerText = 'R$ ' + precoIdeal.toFixed(2).replace('.', ',');
-          elLucro.innerText = 'R$ ' + lucroLiquido.toFixed(2).replace('.', ',');
-          elMargem.innerText = margemDesejadaPct.toFixed(1) + '%';
-          elLucro.className = 'res-val lucro-pos';
-        } else {
-          elPrecoSugerido.innerText = 'Inválido (%)';
-          elLucro.innerText = 'R$ 0,00';
-          elMargem.innerText = '0%';
-          elLucro.className = 'res-val lucro-neg';
+    // Carregar Foto do Produto
+    document.getElementById('productImageInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('productImg').src = evt.target.result;
         }
+        reader.readAsDataURL(file);
       }
+    });
+
+    // Função de Cálculo
+    function calcular() {
+      const name = document.getElementById('productName').value || 'Produto Sem Nome';
+      const cost = parseFloat(document.getElementById('costPrice').value) || 0;
+      const shipping = parseFloat(document.getElementById('shippingCost').value) || 0;
+      const sale = parseFloat(document.getElementById('salePrice').value) || 0;
+      const platformPercent = parseFloat(document.getElementById('platformFee').value) || 0;
+      const taxPercent = parseFloat(document.getElementById('taxFee').value) || 0;
+
+      // Cálculos
+      const totalCost = cost + shipping;
+      const totalFeesPercent = platformPercent + taxPercent;
+      const feesValue = sale * (totalFeesPercent / 100);
+      const netProfit = sale - totalCost - feesValue;
+      const margin = sale > 0 ? (netProfit / sale) * 100 : 0;
+      const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+
+      // Atualiza Tela
+      document.getElementById('displayProductName').innerText = name;
+      document.getElementById('resSalePrice').innerText = 'R$ ' + sale.toFixed(2).replace('.', ',');
+      document.getElementById('resTotalCost').innerText = 'R$ ' + totalCost.toFixed(2).replace('.', ',');
+      document.getElementById('resFees').innerText = 'R$ ' + feesValue.toFixed(2).replace('.', ',');
+      document.getElementById('resProfit').innerText = 'R$ ' + netProfit.toFixed(2).replace('.', ',');
+      document.getElementById('resMargin').innerText = margin.toFixed(1) + '%';
+      document.getElementById('resROI').innerText = roi.toFixed(1) + '%';
     }
 
-    function exportarPDF() {
-      window.print();
-    }
+    // Inicializa
+    calcular();
   </script>
 </body>
 </html>
