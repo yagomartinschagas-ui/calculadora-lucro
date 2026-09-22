@@ -1,8 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
- <link rel="manifest" href="manifest.json">
+ <script>
+  const manifestData = {
+    "name": "Calculadora de Vendas Online",
+    "short_name": "CalcVendas",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb"
+  };
+  const stringManifest = JSON.stringify(manifestData);
+  const blob = new Blob([stringManifest], {type: 'application/json'});
+  const manifestURL = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = manifestURL;
+  document.head.appendChild(link);
+</script>
 <meta name="theme-color" content="#2563eb">
+
    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Vendas Online & Precificação Profissional</title>
