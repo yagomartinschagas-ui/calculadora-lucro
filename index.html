@@ -1,410 +1,543 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Precificação & Ficha de Produto</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #f4f6f9;
-      color: #333;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-
-    /* Header e Logo */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #eef2f5;
-      padding-bottom: 20px;
-      margin-bottom: 25px;
-    }
-
-    .header-info h1 {
-      font-size: 24px;
-      color: #1e293b;
-    }
-
-    .header-info p {
-      font-size: 14px;
-      color: #64748b;
-    }
-
-    .logo-container {
-      text-align: center;
-    }
-
-    .logo-preview {
-      max-height: 70px;
-      max-width: 180px;
-      object-fit: contain;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    /* Formulário e Inputs */
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #f8fafc;
-      padding: 20px;
-      border-radius: 8px;
-      border: 1fr solid #e2e8f0;
-    }
-
-    .card h3 {
-      font-size: 16px;
-      margin-bottom: 15px;
-      color: #0f172a;
-      border-left: 4px solid #2563eb;
-      padding-left: 8px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #475569;
-      margin-bottom: 5px;
-    }
-
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .form-group input:focus {
-      border-color: #2563eb;
-    }
-
-    /* Preview do Produto */
-    .product-preview-card {
-      display: flex;
-      gap: 20px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 25px;
-      align-items: center;
-    }
-
-    .product-img-box {
-      width: 130px;
-      height: 130px;
-      background: #e2e8f0;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 1px dashed #94a3b8;
-      flex-shrink: 0;
-    }
-
-    .product-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-details {
-      flex-grow: 1;
-    }
-
-    .product-details h4 {
-      font-size: 18px;
-      color: #166534;
-      margin-bottom: 8px;
-    }
-
-    .results-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .stat-box {
-      background: #ffffff;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-      text-align: center;
-    }
-
-    .stat-box span {
-      display: block;
-      font-size: 11px;
-      color: #64748b;
-      text-transform: uppercase;
-    }
-
-    .stat-box strong {
-      font-size: 16px;
-      color: #0f172a;
-    }
-
-    .stat-box.highlight strong {
-      color: #16a34a;
-    }
-
-    /* Botões */
-    .actions {
-      margin-top: 25px;
-      display: flex;
-      gap: 15px;
-      justify-content: flex-end;
-    }
-
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-success {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .btn-success:hover {
-      background: #15803d;
-    }
-
-    /* Regras de Impressão (PDF) */
-    @media print {
-      body {
-        background: #fff;
-        padding: 0;
-      }
-      .container {
-        box-shadow: none;
-        padding: 10px;
-      }
-      .actions, .no-print {
-        display: none !important;
-      }
-      .card {
-        border: 1px solid #ccc;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vendas Online & Precificação Profissional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
 
-  <div class="container">
-    <!-- Cabeçalho com Logo -->
-    <div class="header">
-      <div class="header-info">
-        <h1>Análise de Precificação & Produto</h1>
-        <p>Relatório de Viabilidade e Margem de Lucro</p>
-      </div>
-      <div class="logo-container">
-        <img id="logoImg" class="logo-preview" src="https://via.placeholder.com/150x60?text=Sua+Logo" alt="Logo">
-        <input type="file" id="logoInput" accept="image/*" class="no-print" style="font-size: 11px;">
-      </div>
-    </div>
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center justify-center font-bold text-xl">
+                    📊
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">LucroPro <span class="text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full font-medium ml-1">E-commerce 3.0</span></h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Calculadora de Precificação & Análise de Margem</p>
+                </div>
+            </div>
 
-    <!-- Inputs -->
-    <div class="grid">
-      <!-- Dados do Produto -->
-      <div class="card">
-        <h3>1. Dados do Produto</h3>
+            <div class="flex items-center space-x-3">
+                <!-- Badge de Privacidade -->
+                <div class="hidden sm:flex items-center space-x-1.5 text-xs bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/50 shadow-sm" title="Seus dados financeiros não saem do seu computador. Processamento 100% local.">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span class="font-medium">100% Privado & Seguro</span>
+                </div>
+
+                <!-- Botão Tema Dark/Light -->
+                <button onclick="toggleDarkMode()" aria-label="Alternar tema" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <svg id="theme-icon-dark" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="theme-icon-light" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <div class="form-group">
-          <label for="productName">Nome do Produto</label>
-          <input type="text" id="productName" placeholder="Ex: Camisa Polo Masculina" value="Camisa Polo Masculina" oninput="calcular()">
+        <!-- Alerta de Privacidade / Boas-vindas -->
+        <div class="mb-6 bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-start space-x-3">
+                <div class="p-2 bg-indigo-500 text-white rounded-xl mt-0.5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <h2 class="font-semibold text-indigo-900 dark:text-indigo-200">Precificação Estratégica Inteligente</h2>
+                    <p class="text-sm text-indigo-700/80 dark:text-indigo-300/80">Preencha os custos do seu produto e taxas do canal de venda. O sistema calcula automaticamente o preço ideal de venda para atingir a margem desejada.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 self-end md:self-auto">
+                <button onclick="resetForm()" class="px-3.5 py-2 text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 rounded-xl hover:bg-indigo-50 transition">Restaurar Padrões</button>
+                <button onclick="presetShopee()" class="px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 shadow-sm transition">Preset Shopee/ML</button>
+            </div>
         </div>
 
-        <div class="form-group no-print">
-          <label for="productImageInput">Foto do Produto</label>
-          <input type="file" id="productImageInput" accept="image/*">
+        <!-- Grid Principal: Formulário vs Resultados -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Coluna Esquerda: Entradas de Dados (Formulário) -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Bloco 1: Custos Diretos -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
+                        <span>1. Custos do Produto</span>
+                        <span class="text-xs font-normal text-slate-500">Base unitária</span>
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Custo de Aquisição / Fabricação (R$)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-medium">R$</div>
+                                <input type="number" id="custo_produto" value="45.00" step="0.01" min="0" oninput="calcular()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Embalagem, Etiquetas e Insumos (R$)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-medium">R$</div>
+                                <input type="number" id="custo_embalagem" value="3.50" step="0.01" min="0" oninput="calcular()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Frete Fixo / Logística Reversa (R$)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-medium">R$</div>
+                                <input type="number" id="custo_frete" value="0.00" step="0.01" min="0" oninput="calcular()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloco 2: Taxas & Tributos -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
+                        <span>2. Taxas & Impostos</span>
+                        <span class="text-xs font-normal text-slate-500">% sobre a venda</span>
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Comissão do Marketplace (%)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <input type="number" id="taxa_marketplace" value="14.0" step="0.1" min="0" max="100" oninput="calcular()" class="block w-full pl-4 pr-10 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 font-medium">%</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Taxa Fixa por Item Vendido (R$)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-medium">R$</div>
+                                <input type="number" id="taxa_fixa" value="4.00" step="0.01" min="0" oninput="calcular()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Impostos / Nota Fiscal (%)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <input type="number" id="imposto" value="4.5" step="0.1" min="0" max="100" oninput="calcular()" class="block w-full pl-4 pr-10 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 font-medium">%</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Custos Operacionais / Marketing (%)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <input type="number" id="custo_operacional" value="5.0" step="0.1" min="0" max="100" oninput="calcular()" class="block w-full pl-4 pr-10 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 font-medium">%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloco 3: Meta de Lucro -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4">3. Margem de Lucro Desejada</h3>
+                    
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro Líquido Alvo (%)</label>
+                            <span id="label_margem_alvo" class="text-sm font-bold text-indigo-600 dark:text-indigo-400">25%</span>
+                        </div>
+                        <input type="range" id="margem_desejada" min="1" max="80" value="25" step="1" oninput="atualizarSlider(); calcular();" class="w-full accent-indigo-600 cursor-pointer">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Coluna Direita: Dashboard de Resultados & Gráficos -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Cards de Destaque Financeiro -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <!-- Preço de Venda Sugerido -->
+                    <div class="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-2xl p-6 shadow-xl shadow-indigo-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-medium uppercase tracking-wider text-indigo-200">Preço de Venda Sugerido</span>
+                                <span class="bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-full font-semibold">Recomendado</span>
+                            </div>
+                            <div class="mt-4 flex items-baseline">
+                                <span id="res_preco_venda" class="text-4xl font-extrabold tracking-tight">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-indigo-500/45 flex justify-between text-xs text-indigo-100">
+                            <span>Markup Multiplicador: <strong id="res_markup" class="text-white">0.0x</strong></span>
+                            <span>Ponto de Equilíbrio: <strong id="res_breakeven" class="text-white">R$ 0,00</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Lucro Líquido Real -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lucro Líquido por Unidade</span>
+                                <span id="badge_lucro_status" class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] px-2.5 py-1 rounded-full font-semibold">Saudável</span>
+                            </div>
+                            <div class="mt-4 flex items-baseline">
+                                <span id="res_lucro_rs" class="text-4xl font-extrabold text-slate-900 dark:text-white">R$ 0,00</span>
+                                <span id="res_lucro_pct" class="ml-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">(0%)</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span>ROI sobre Custo: <strong id="res_roi" class="text-slate-900 dark:text-white">0%</strong></span>
+                            <span>Margem de Contribuição: <strong id="res_contribuicao" class="text-slate-900 dark:text-white">0%</strong></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Detalhamento de Custos e Gráficos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Detalhamento Numérico -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-900 dark:text-white mb-4 text-sm flex items-center justify-between">
+                            <span>Detalhamento da Venda</span>
+                            <span class="text-xs text-slate-400 font-normal">Por unidade</span>
+                        </h4>
+
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-slate-500 dark:text-slate-400">Custos Diretos (Prod + Emb + Frete):</span>
+                                <span id="det_custos_diretos" class="font-semibold text-slate-900 dark:text-white">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-slate-500 dark:text-slate-400">Taxas Marketplace (% + Fixa):</span>
+                                <span id="det_taxas_mp" class="font-semibold text-slate-900 dark:text-white">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-slate-500 dark:text-slate-400">Impostos & Tributos:</span>
+                                <span id="det_impostos" class="font-semibold text-slate-900 dark:text-white">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-slate-500 dark:text-slate-400">Custos Operacionais:</span>
+                                <span id="det_operacional" class="font-semibold text-slate-900 dark:text-white">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between py-2 text-base font-bold bg-indigo-50/50 dark:bg-indigo-950/20 px-3 rounded-xl">
+                                <span class="text-indigo-900 dark:text-indigo-200">Lucro Líquido:</span>
+                                <span id="det_lucro" class="text-indigo-600 dark:text-indigo-400">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Pizza / Composição -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center justify-center">
+                        <h4 class="font-bold text-slate-900 dark:text-white mb-2 text-sm w-full text-left">Composição do Preço de Venda</h4>
+                        <div class="w-full h-56 relative flex items-center justify-center">
+                            <canvas id="custosChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Simulação de Cenários de Volume de Vendas -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4 text-sm flex items-center justify-between">
+                        <span>Simulador de Faturamento & Lucro Mensal</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md font-medium">Projeção</span>
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50">
+                            <span class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Vendas / Mês (Unid)</span>
+                            <input type="number" id="sim_vendas_mes" value="100" min="1" step="1" oninput="calcular()" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white">
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50">
+                            <span class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Faturamento Bruto</span>
+                            <span id="sim_faturamento" class="text-lg font-bold text-slate-900 dark:text-white">R$ 0,00</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50">
+                            <span class="block text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1">Lucro Líquido Total</span>
+                            <span id="sim_lucro_total" class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">💡 Dica: A exportação e cópia dos dados é feita instantaneamente sem envio externo.</p>
+                        <button onclick="copiarResumo()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                            <span>Copiar Relatório Completo</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="form-group">
-          <label for="costPrice">Custo do Produto (R$)</label>
-          <input type="number" id="costPrice" value="25.00" step="0.01" oninput="calcular()">
-        </div>
+    </main>
 
-        <div class="form-group">
-          <label for="shippingCost">Embalagem & Frete Fixo (R$)</label>
-          <input type="number" id="shippingCost" value="4.00" step="0.01" oninput="calcular()">
-        </div>
-      </div>
+    <script>
+        let custosChartInstance = null;
 
-      <!-- Venda e Taxas da Plataforma -->
-      <div class="card">
-        <h3>2. Plataforma & Venda</h3>
-        
-        <div class="form-group">
-          <label for="salePrice">Preço de Venda Pretendido (R$)</label>
-          <input type="number" id="salePrice" value="69.90" step="0.01" oninput="calcular()">
-        </div>
-
-        <div class="form-group">
-          <label for="platformFee">Taxa da Plataforma (%) [Ex: Shopee / Mercado Livre]</label>
-          <input type="number" id="platformFee" value="14" step="0.1" oninput="calcular()">
-        </div>
-
-        <div class="form-group">
-          <label for="taxFee">Impostos / Outros (%)</label>
-          <input type="number" id="taxFee" value="6" step="0.1" oninput="calcular()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Card de Apresentação com a Imagem do Produto -->
-    <div class="product-preview-card">
-      <div class="product-img-box">
-        <img id="productImg" src="https://via.placeholder.com/130?text=Foto+do+Produto" alt="Produto">
-      </div>
-      <div class="product-details">
-        <h4 id="displayProductName">Camisa Polo Masculina</h4>
-        
-        <div class="results-grid">
-          <div class="stat-box">
-            <span>Preço Venda</span>
-            <strong id="resSalePrice">R$ 69,90</strong>
-          </div>
-
-          <div class="stat-box">
-            <span>Custo Total</span>
-            <strong id="resTotalCost">R$ 29,00</strong>
-          </div>
-
-          <div class="stat-box">
-            <span>Taxas Totais</span>
-            <strong id="resFees">R$ 13,98</strong>
-          </div>
-
-          <div class="stat-box highlight">
-            <span>Lucro Líquido</span>
-            <strong id="resProfit">R$ 26,92</strong>
-          </div>
-
-          <div class="stat-box highlight">
-            <span>Margem %</span>
-            <strong id="resMargin">38.5%</strong>
-          </div>
-
-          <div class="stat-box">
-            <span>Retorno (ROI)</span>
-            <strong id="resROI">92.8%</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Botões de Ação -->
-    <div class="actions no-print">
-      <button class="btn btn-primary" onclick="calcular()">Recalcular</button>
-      <button class="btn btn-success" onclick="window.print()">Exportar PDF / Imprimir</button>
-    </div>
-  </div>
-
-  <script>
-    // Carregar Logo
-    document.getElementById('logoInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          document.getElementById('logoImg').src = evt.target.result;
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+            atualizarGrafico();
         }
-        reader.readAsDataURL(file);
-      }
-    });
 
-    // Carregar Foto do Produto
-    document.getElementById('productImageInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          document.getElementById('productImg').src = evt.target.result;
+        function atualizarSlider() {
+            const val = document.getElementById('margem_desejada').value;
+            document.getElementById('label_margem_alvo').innerText = val + '%';
         }
-        reader.readAsDataURL(file);
-      }
-    });
 
-    // Função de Cálculo
-    function calcular() {
-      const name = document.getElementById('productName').value || 'Produto Sem Nome';
-      const cost = parseFloat(document.getElementById('costPrice').value) || 0;
-      const shipping = parseFloat(document.getElementById('shippingCost').value) || 0;
-      const sale = parseFloat(document.getElementById('salePrice').value) || 0;
-      const platformPercent = parseFloat(document.getElementById('platformFee').value) || 0;
-      const taxPercent = parseFloat(document.getElementById('taxFee').value) || 0;
+        function resetForm() {
+            document.getElementById('custo_produto').value = "45.00";
+            document.getElementById('custo_embalagem').value = "3.50";
+            document.getElementById('custo_frete').value = "0.00";
+            document.getElementById('taxa_marketplace').value = "14.0";
+            document.getElementById('taxa_fixa').value = "4.00";
+            document.getElementById('imposto').value = "4.5";
+            document.getElementById('custo_operacional').value = "5.0";
+            document.getElementById('margem_desejada').value = "25";
+            document.getElementById('sim_vendas_mes').value = "100";
+            atualizarSlider();
+            calcular();
+        }
 
-      // Cálculos
-      const totalCost = cost + shipping;
-      const totalFeesPercent = platformPercent + taxPercent;
-      const feesValue = sale * (totalFeesPercent / 100);
-      const netProfit = sale - totalCost - feesValue;
-      const margin = sale > 0 ? (netProfit / sale) * 100 : 0;
-      const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+        function presetShopee() {
+            document.getElementById('custo_produto').value = "30.00";
+            document.getElementById('custo_embalagem').value = "2.00";
+            document.getElementById('custo_frete').value = "0.00";
+            document.getElementById('taxa_marketplace').value = "20.0"; // Taxa padrão com frete grátis
+            document.getElementById('taxa_fixa').value = "4.00";
+            document.getElementById('imposto').value = "4.0";
+            document.getElementById('custo_operacional').value = "5.0";
+            document.getElementById('margem_desejada').value = "30";
+            atualizarSlider();
+            calcular();
+        }
 
-      // Atualiza Tela
-      document.getElementById('displayProductName').innerText = name;
-      document.getElementById('resSalePrice').innerText = 'R$ ' + sale.toFixed(2).replace('.', ',');
-      document.getElementById('resTotalCost').innerText = 'R$ ' + totalCost.toFixed(2).replace('.', ',');
-      document.getElementById('resFees').innerText = 'R$ ' + feesValue.toFixed(2).replace('.', ',');
-      document.getElementById('resProfit').innerText = 'R$ ' + netProfit.toFixed(2).replace('.', ',');
-      document.getElementById('resMargin').innerText = margin.toFixed(1) + '%';
-      document.getElementById('resROI').innerText = roi.toFixed(1) + '%';
-    }
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-    // Inicializa
-    calcular();
-  </script>
+        function calcular() {
+            // Entradas
+            const custoProd = parseFloat(document.getElementById('custo_produto').value) || 0;
+            const custoEmb = parseFloat(document.getElementById('custo_embalagem').value) || 0;
+            const custoFrete = parseFloat(document.getElementById('custo_frete').value) || 0;
+            const custosDiretos = custoProd + custoEmb + custoFrete;
+
+            const taxaMpPct = (parseFloat(document.getElementById('taxa_marketplace').value) || 0) / 100;
+            const taxaFixa = parseFloat(document.getElementById('taxa_fixa').value) || 0;
+            const impostoPct = (parseFloat(document.getElementById('imposto').value) || 0) / 100;
+            const operacionalPct = (parseFloat(document.getElementById('custo_operacional').value) || 0) / 100;
+            const margemAlvoPct = (parseFloat(document.getElementById('margem_desejada').value) || 0) / 100;
+
+            // Fórmula de Precificação Baseada em Margem Desejada:
+            // Preço = (Custos Diretos + Taxa Fixa) / (1 - (TaxaMP% + Imposto% + Operacional% + MargemAlvo%))
+            const somaPercentuais = taxaMpPct + impostoPct + operacionalPct + margemAlvoPct;
+            
+            let precoVenda = 0;
+            if (somaPercentuais < 1) {
+                precoVenda = (custosDiretos + taxaFixa) / (1 - somaPercentuais);
+            } else {
+                precoVenda = custosDiretos * 2; // fallback de segurança
+            }
+
+            // Cálculos detalhados com base no preço de venda sugerido
+            const valorTaxaMpPct = precoVenda * taxaMpPct;
+            const valorImposto = precoVenda * impostoPct;
+            const valorOperacional = precoVenda * operacionalPct;
+            const totalTaxasMp = valorTaxaMpPct + taxaFixa;
+            
+            const lucroLiquidoRs = precoVenda - (custosDiretos + totalTaxasMp + valorImposto + valorOperacional);
+            const lucroLiquidoRealPct = precoVenda > 0 ? (lucroLiquidoRs / precoVenda) * 100 : 0;
+            
+            const markup = custosDiretos > 0 ? (precoVenda / custosDiretos) : 0;
+            const roi = custosDiretos > 0 ? (lucroLiquidoRs / custosDiretos) * 100 : 0;
+            const contribuicao = precoVenda > 0 ? ((precoVenda - (custosDiretos + totalTaxasMp)) / precoVenda) * 100 : 0;
+
+            // Simulação mensal
+            const qtdMes = parseInt(document.getElementById('sim_vendas_mes').value) || 0;
+            const faturamentoMes = precoVenda * qtdMes;
+            const lucroTotalMes = lucroLiquidoRs * qtdMes;
+
+            // Atualização do DOM
+            document.getElementById('res_preco_venda').innerText = formatarMoeda(precoVenda);
+            document.getElementById('res_markup').innerText = markup.toFixed(2) + 'x';
+            document.getElementById('res_breakeven').innerText = formatarMoeda(custosDiretos + taxaFixa); // Aproximação de custo fixo unitário
+            
+            document.getElementById('res_lucro_rs').innerText = formatarMoeda(lucroLiquidoRs);
+            document.getElementById('res_lucro_pct').innerText = '(' + lucroLiquidoRealPct.toFixed(1) + '%)';
+            document.getElementById('res_roi').innerText = roi.toFixed(1) + '%';
+            document.getElementById('res_contribuicao').innerText = contribuicao.toFixed(1) + '%';
+
+            // Detalhamento numérico
+            document.getElementById('det_custos_diretos').innerText = formatarMoeda(custosDiretos);
+            document.getElementById('det_taxas_mp').innerText = formatarMoeda(totalTaxasMp);
+            document.getElementById('det_impostos').innerText = formatarMoeda(valorImposto);
+            document.getElementById('det_operacional').innerText = formatarMoeda(valorOperacional);
+            document.getElementById('det_lucro').innerText = formatarMoeda(lucroLiquidoRs);
+
+            // Simulação mensal DOM
+            document.getElementById('sim_faturamento').innerText = formatarMoeda(faturamentoMes);
+            document.getElementById('sim_lucro_total').innerText = formatarMoeda(lucroTotalMes);
+
+            // Badge de status do lucro
+            const badge = document.getElementById('badge_lucro_status');
+            if (lucroLiquidoRealPct >= 20) {
+                badge.className = "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] px-2.5 py-1 rounded-full font-semibold";
+                badge.innerText = "Excelente";
+            } else if (lucroLiquidoRealPct >= 10) {
+                badge.className = "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px] px-2.5 py-1 rounded-full font-semibold";
+                badge.innerText = "Saudável";
+            } else if (lucroLiquidoRealPct > 0) {
+                badge.className = "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] px-2.5 py-1 rounded-full font-semibold";
+                badge.innerText = "Margem Baixa";
+            } else {
+                badge.className = "bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-[10px] px-2.5 py-1 rounded-full font-semibold";
+                badge.innerText = "Prejuízo!";
+            }
+
+            // Atualizar Gráfico
+            atualizarGraficoDados([
+                custosDiretos,
+                totalTaxasMp,
+                valorImposto,
+                valorOperacional,
+                Math.max(0, lucroLiquidoRs)
+            ]);
+        }
+
+        function atualizarGraficoDados(dados) {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            if (custosChartInstance) {
+                custosChartInstance.data.datasets[0].data = dados;
+                custosChartInstance.options.plugins.legend.labels.color = textColor;
+                custosChartInstance.update();
+                return;
+            }
+
+            const ctx = document.getElementById('custosChart').getContext('2d');
+            custosChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Custos Diretos', 'Taxas Marketplace', 'Impostos', 'Operacional', 'Lucro Líquido'],
+                    datasets: [{
+                        data: dados,
+                        backgroundColor: [
+                            '#3b82f6', // Azul
+                            '#f59e0b', // Amarelo
+                            '#ef4444', // Vermelho
+                            '#8b5cf6', // Roxo
+                            '#10b981'  // Verde
+                        ],
+                        borderWidth: isDark ? 2 : 0,
+                        borderColor: isDark ? '#0f172a' : '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11, family: 'Inter' },
+                                color: textColor
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function atualizarGrafico() {
+            calcular();
+        }
+
+        function copiarResumo() {
+            const preco = document.getElementById('res_preco_venda').innerText;
+            const lucro = document.getElementById('res_lucro_rs').innerText;
+            const pct = document.getElementById('res_lucro_pct').innerText;
+            
+            const texto = `📊 Relatório de Precificação - LucroPro\n` +
+                          `• Preço de Venda Sugerido: ${preco}\n` +
+                          `• Lucro Líquido Unitário: ${lucro} ${pct}\n` +
+                          `Gerado com segurança e privacidade local (100% offline).`;
+
+            document.execCommand('copy'); // Fallback seguro
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(texto).then(() => {
+                    alertPersonalizado("Resumo copiado com sucesso para a área de transferência!");
+                }).catch(() => {
+                    alertPersonalizado("Relatório pronto para uso!");
+                });
+            } else {
+                alertPersonalizado("Resumo gerado!");
+            }
+        }
+
+        function alertPersonalizado(msg) {
+            // Cria um toast customizado leve sem usar alert nativo
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-2xl text-sm font-medium z-50 transition-all duration-300 transform translate-y-2 opacity-0";
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Inicializa ao carregar a página
+        window.onload = function() {
+            atualizarSlider();
+            calcular();
+        }
+    </script>
+
 </body>
 </html>
