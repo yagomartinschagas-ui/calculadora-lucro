@@ -1,151 +1,50 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Custos e Margem</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #cbd5e1;
-        }
+function criarAbasEstruturadas() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Aba de Precificação (Calculadora Geral)
+  var abaPrecificacao = ss.getSheetByName("Precificação") || ss.insertSheet("Precificação");
+  abaPrecificacao.clear();
+  var dadosPrecificacao = [
+    ["CALCULADORA DE PRECIFICAÇÃO E LUCRO", "", "", ""],
+    ["", "", "", ""],
+    ["Produto / Descrição", "Custo de Produção / Aquisição (R$)", "Margem de Lucro Desejada (%)", "Preço de Venda Sugerido (R$)"],
+    ["Exemplo: Embalagem P", 5.00, 100, "=B4*(1+(C4/100))"],
+    ["", "", "", ""]
+  ];
+  abaPrecificacao.getRange(1, 1, dadosPrecificacao.length, dadosPrecificacao[0].length).setValues(dadosPrecificacao);
+  abaPrecificacao.getRange("A1:D1").merge().setBackground("#1155cc").setFontColor("#ffffff").setFontWeight("bold");
+  abaPrecificacao.getRange("A3:D3").setBackground("#d9d9d9").setFontWeight("bold");
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+  // 2. Aba de Vendas e Custos (Fluxo Operacional)
+  var abaVendas = ss.getSheetByName("Vendas e Custos") || ss.insertSheet("Vendas e Custos");
+  abaVendas.clear();
+  var dadosVendas = [
+    ["CONTROLE DE VENDAS E CUSTOS", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+    ["Data", "Produto", "Quantidade de Vendas", "Custo Unitário (R$)", "Preço de Venda Unitário (R$)", "Taxas Plataforma (R$)", "Lucro Total (R$)"],
+    ["", "", "", "", "", "", "=IF(C4<>\"\"; (E4*C4) - (D4*C4) - F4; \"\")"],
+    ["", "", "", "", "", "", "=IF(C5<>\"\"; (E5*C5) - (D5*C5) - F5; \"\")"]
+  ];
+  abaVendas.getRange(1, 1, dadosVendas.length, dadosVendas[0].length).setValues(dadosVendas);
+  abaVendas.getRange("A1:G1").merge().setBackground("#38761d").setFontColor("#ffffff").setFontWeight("bold");
+  abaVendas.getRange("A3:G3").setBackground("#d9d9d9").setFontWeight("bold");
 
-        .calculator-container {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        h2 {
-            margin-top: 0;
-            text-align: center;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: 24px;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            border-color: var(--primary-color);
-        }
-
-        .result-box {
-            margin-top: 24px;
-            padding: 16px;
-            background-color: #f1f5f9;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .result-item:last-child {
-            margin-bottom: 0;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            border-top: 1px solid var(--border-color);
-            padding-top: 8px;
-            margin-top: 8px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="calculator-container">
-        <h2>Calculadora de Precificação</h2>
-        
-        <div class="input-group">
-            <label for="custo">Custo do Produto (R$)</label>
-            <input type="number" id="custo" placeholder="0,00" oninput="calcular()">
-        </div>
-
-        <div class="input-group">
-            <label for="despesas">Despesas Fixas / Operacionais (%)</label>
-            <input type="number" id="despesas" placeholder="0" oninput="calcular()">
-        </div>
-
-        <div class="input-group">
-            <label for="margem">Margem de Lucro Desejada (%)</label>
-            <input type="number" id="margem" placeholder="0" oninput="calcular()">
-        </div>
-
-        <div class="result-box">
-            <div class="result-item">
-                <span>Preço de Venda Sugerido:</span>
-                <span id="precoVenda">R$ 0,00</span>
-            </div>
-            <div class="result-item">
-                <span>Lucro Estimado:</span>
-                <span id="lucroEstimado">R$ 0,00</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function calcular() {
-            const custo = parseFloat(document.getElementById('custo').value) || 0;
-            const despesas = parseFloat(document.getElementById('despesas').value) || 0;
-            const margem = parseFloat(document.getElementById('margem').value) || 0;
-
-            // Fórmula baseada no marjear por preço de venda
-            const divisor = 1 - ((despesas + margem) / 100);
-            
-            let precoVenda = 0;
-            if (divisor > 0) {
-                precoVenda = custo / divisor;
-            }
-
-            const lucro = precoVenda * (margem / 100);
-
-            document.getElementById('precoVenda').innerText = `R$ ${precoVenda.toFixed(2).replace('.', ',')}`;
-            document.getElementById('lucroEstimado').innerText = `R$ ${lucro.toFixed(2).replace('.', ',')}`;
-        }
-    </script>
-
-</body>
-</html>
+  // 3. Aba de Calculadora de ROAS (Ads)
+  var abaRoas = ss.getSheetByName("Calculadora de ROAS") || ss.insertSheet("Calculadora de ROAS");
+  abaRoas.clear();
+  var dadosRoas = [
+    ["CALCULADORA DE ROAS (ANÚNCIOS - SHOPEE / MERCADO LIVRE)", "", "", ""],
+    ["", "", "", ""],
+    ["Métrica", "Valor", "", "Resultado / Análise"],
+    ["Valor Investido em Ads (R$)", 100.00, "", "ROAS Obtido:"],
+    ["Receita Gerada com Vendas (R$)", 500.00, "", "=IF(B4>0; B5/B4; 0)"],
+    ["", "", "", ""],
+    ["Custo por Aquisição - CPA (R$)", "=IF(B8>0; B4/B8; 0)", "", "ROAS de Equilíbrio (Mínimo):"],
+    ["Quantidade de Vendas por Ads", 10, "", "Insira quanto precisa para não ter prejuízo"]
+  ];
+  abaRoas.getRange(1, 1, dadosRoas.length, dadosRoas[0].length).setValues(dadosRoas);
+  abaRoas.getRange("A1:D1").merge().setBackground("#b45f06").setFontColor("#ffffff").setFontWeight("bold");
+  abaRoas.getRange("A3:D3").setBackground("#d9d9d9").setFontWeight("bold");
+  
+  SpreadsheetApp.getUi().alert("Abas criadas e organizadas com sucesso!");
+}
