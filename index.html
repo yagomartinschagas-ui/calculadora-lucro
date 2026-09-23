@@ -1,3 +1,73 @@
+function criarPlanilhaPerfeita() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // ==========================================
+  // 1. ABA DE PRECIFICAÇÃO BLINDADA
+  // ==========================================
+  var abaPrecificacao = ss.getSheetByName("Precificação") || ss.insertSheet("Precificação");
+  abaPrecificacao.clear();
+  
+  var dadosPrecificacao = [
+    ["PRECIFICAÇÃO INTELIGENTE - LUCRO REAL E SEGURO", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["Produto / Descrição", "Custo do Produto (R$)", "Custo Embalagem (R$)", "Taxa Plataforma (%)", "Impostos / Outros (%)", "Margem de Lucro Desejada (%)", "Custo Total Fixo (R$)", "Preço de Venda Sugerido (R$)", "Lucro Líquido Unitário (R$)", "Markup Divisor"],
+    ["Exemplo: Embalagem P", 3.50, 0.50, 14.0, 4.0, 30.0, "=B4+C4", "=G4/(1 - ((D4+E4+F4)/100))", "=H4-G4-(H4*(D4+E4)/100)", "=1-((D4+E4+F4)/100)"],
+    ["Exemplo: Camiseta Alpha", 25.00, 1.50, 16.0, 4.0, 40.0, "=B5+C5", "=G5/(1 - ((D5+E5+F5)/100))", "=H5-G5-(H5*(D5+E5)/100)", "=1-((D5+E5+F5)/100)"]
+  ];
+  
+  abaPrecificacao.getRange(1, 1, dadosPrecificacao.length, dadosPrecificacao[0].length).setValues(dadosPrecificacao);
+  abaPrecificacao.getRange("A1:J1").merge().setBackground("#1155cc").setFontColor("#ffffff").setFontWeight("bold").setHorizontalAlignment("center");
+  abaPrecificacao.getRange("A3:J3").setBackground("#d9d9d9").setFontWeight("bold");
+  abaPrecificacao.setColumnWidth(1, 180);
+  abaPrecificacao.setColumnWidth(8, 160);
+  abaPrecificacao.setColumnWidth(9, 160);
+
+  // ==========================================
+  // 2. ABA DE CONTROLE DE VENDAS E CUSTOS
+  // ==========================================
+  var abaVendas = ss.getSheetByName("Vendas e Custos") || ss.insertSheet("Vendas e Custos");
+  abaVendas.clear();
+  
+  var dadosVendas = [
+    ["CONTROLE OPERACIONAL DE VENDAS", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["Data", "Produto", "Qtd Vendida", "Custo Unitário (R$)", "Preço de Venda Unit. (R$)", "Taxas da Plataforma (R$)", "Faturamento Total (R$)", "Custo Total (R$)", "Lucro Líquido Real (R$)"],
+    ["23/09/2026", "Embalagem P", 10, 4.00, 8.50, 3.40, "=C4*E4", "=(C4*D4)+F4", "=G4-H4"],
+    ["", "", "", "", "", "", "", "", ""]
+  ];
+  
+  abaVendas.getRange(1, 1, dadosVendas.length, dadosVendas[0].length).setValues(dadosVendas);
+  abaVendas.getRange("A1:I1").merge().setBackground("#38761d").setFontColor("#ffffff").setFontWeight("bold").setHorizontalAlignment("center");
+  abaVendas.getRange("A3:I3").setBackground("#d9d9d9").setFontWeight("bold");
+  abaVendas.setColumnWidth(2, 180);
+  abaVendas.setColumnWidth(7, 150);
+  abaVendas.setColumnWidth(9, 160);
+
+  // ==========================================
+  // 3. ABA DE CALCULADORA DE ROAS (ADS)
+  // ==========================================
+  var abaRoas = ss.getSheetByName("Calculadora de ROAS") || ss.insertSheet("Calculadora de ROAS");
+  abaRoas.clear();
+  
+  var dadosRoas = [
+    ["CALCULADORA DE ROAS E ANÚNCIOS (SHOPEE / MERCADO LIVRE)", "", "", ""],
+    ["", "", "", ""],
+    ["Métrica de Anúncio", "Valor Inserido", "", "Análise de Desempenho"],
+    ["Valor Investido em Ads (R$)", 150.00, "", "ROAS Obtido (Retorno sobre Ads):"],
+    ["Receita Gerada com Vendas (R$)", 750.00, "", "=IF(B4>0; B5/B4; 0)"],
+    ["", "", "", ""],
+    ["Quantidade de Vendas Realizadas via Ads", 15, "", "Custo por Aquisição (CPA - Quanto custa cada venda):"],
+    ["Margem de Lucro Média do Produto (%)", 35.0, "", "=IF(B7>0; B4/B7; 0)"]
+  ];
+  
+  abaRoas.getRange(1, 1, dadosRoas.length, dadosRoas[0].length).setValues(dadosRoas);
+  abaRoas.getRange("A1:D1").merge().setBackground("#b45f06").setFontColor("#ffffff").setFontWeight("bold").setHorizontalAlignment("center");
+  abaRoas.getRange("A3:D3").setBackground("#d9d9d9").setFontWeight("bold");
+  abaRoas.setColumnWidth(1, 250);
+  abaRoas.setColumnWidth(4, 250);
+  
+  SpreadsheetApp.getUi().alert("Pronto! Sua estrutura perfeita e blindada foi gerada com sucesso nas abas!");
+}
 function criarAbasEstruturadas() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
